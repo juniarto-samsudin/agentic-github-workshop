@@ -104,6 +104,22 @@ curl -X DELETE http://localhost:8000/todos/1
 
 ---
 
+## 🧪 Running Tests
+
+The test suite uses [pytest](https://docs.pytest.org/) and FastAPI's built-in `TestClient`.
+
+```bash
+# Install dependencies (includes test dependencies)
+pip install -r requirements.txt
+
+# Run all tests
+pytest tests/ -v
+```
+
+Tests are located in the `tests/` directory and cover every API endpoint — including normal cases, empty results, validation errors, and 404 scenarios.
+
+---
+
 ## 🏗️ Project Structure
 
 ```
@@ -113,6 +129,9 @@ demo-ghec/
 │   ├── main.py          # FastAPI application and route handlers
 │   ├── models.py         # Pydantic models for request/response
 │   └── database.py       # In-memory data storage layer
+├── tests/
+│   ├── __init__.py
+│   └── test_todo.py      # pytest unit tests for all API endpoints
 ├── requirements.txt      # Python dependencies
 └── README.md
 ```
