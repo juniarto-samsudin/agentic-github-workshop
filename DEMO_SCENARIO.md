@@ -1,229 +1,155 @@
 # 🎬 Agentic GitHub Copilot — Demo Scenario
 
-> **15-minute live demonstration** of GitHub Copilot's agentic capabilities on GitHub.com  
-> Audience: Mixed (developers, managers, executives)
+> **スライドごとのライブデモシナリオ**
+> 各スライド（3〜8）に対応するデモを実施し、6層アーキテクチャを体験的に示す
 
 ---
 
-## 📋 Demo Overview
+## 📋 全体構成
 
-This demonstration showcases three agentic capabilities of GitHub Copilot directly on GitHub.com, using a **Python FastAPI Todo API** as the target application.
+| スライド | テーマ | デモ内容 | 所要時間 |
+|---------|--------|---------|---------|
+| 3 | [入口（Entry）](#-スライド-3入口entry) | Chat でコード理解 → Issue 作成 → Copilot アサイン | ~3 min |
+| 4 | 実行（Execution） | TBD | TBD |
+| 5 | 協働（Collaboration） | TBD | TBD |
+| 6 | レビュー（Review） | TBD | TBD |
+| 7 | 文脈（Context） | TBD | TBD |
+| 8 | 統制（Governance） | TBD | TBD |
 
-| # | Scenario | Feature | Duration |
-|---|----------|---------|----------|
-| 1 | [Copilot Chat](#-scenario-1-copilot-chat-on-githubcom) | Understand & generate code with full repo context | ~3 min |
-| 2 | [Coding Agent (Issue → PR)](#-scenario-2-copilot-coding-agent-issue--pr) | Assign an Issue to Copilot → autonomous PR creation | ~6 min |
-| 3 | [Code Review on PR](#-scenario-3-copilot-code-review-on-pr) | Automated intelligent PR review | ~5 min |
-| 4 | [Wrap-up](#-wrap-up) | Recap & key takeaways | ~1 min |
+### デモアプリケーション
 
-### About the Demo App
+Python FastAPI で構築した **Todo API**（CRUD 操作）をデモ対象とする。
 
-A simple REST API for managing todo items:
+```
+demo-ghec/
+├── app/
+│   ├── main.py          # FastAPI ルートハンドラ（5 エンドポイント）
+│   ├── models.py         # Pydantic モデル（TodoCreate / TodoUpdate / Todo）
+│   └── database.py       # インメモリストレージ（dict ベース）
+├── requirements.txt      # fastapi, uvicorn, pydantic
+└── README.md
+```
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/todos` | List all todos |
-| `GET` | `/todos/{id}` | Get a specific todo |
-| `POST` | `/todos` | Create a new todo |
-| `PUT` | `/todos/{id}` | Update an existing todo |
-| `DELETE` | `/todos/{id}` | Delete a todo |
-
-**Intentional gaps** (for Copilot to fill during demo):
-- ❌ No unit tests
-- ❌ No Dockerfile
-- ❌ No input validation
-
----
-
-## 💬 Scenario 1: Copilot Chat on GitHub.com
-
-> **Goal:** Show that Copilot understands the entire repository and generates contextually accurate code.
-
-### Step 1-1: Explain the codebase
-
-1. Open the repository on GitHub.com
-2. Click the **Copilot Chat icon** (top-right corner)
-3. Ask:
-
-   > **"What does this project do? Explain the architecture and how the files are connected."**
-
-4. **Expected result:** Copilot reads all files and gives a coherent summary — mentioning FastAPI, Pydantic models, in-memory database, and the CRUD endpoints.
-
-🗣️ **Talking point:** *"Copilot has full repo context — it's not just looking at one file. This is like having an onboarding buddy who already read every line of code."*
-
-### Step 1-2: Generate a Dockerfile
-
-1. In the same chat, ask:
-
-   > **"Write a Dockerfile for this project."**
-
-2. **Expected result:** Copilot generates a production-ready Dockerfile that:
-   - Uses `python:3.11-slim` as base
-   - Copies `requirements.txt` and installs dependencies
-   - Uses `uvicorn app.main:app` as the entrypoint
-   - Exposes port 8000
-
-🗣️ **Talking point:** *"Notice it referenced our actual requirements.txt and the correct uvicorn entry point — this isn't a generic template."*
-
-### Step 1-3: Ask about deployment
-
-1. Ask:
-
-   > **"How would I deploy this to Azure App Service?"**
-
-2. **Expected result:** Step-by-step deployment instructions specific to *this* project.
-
-🗣️ **Talking point:** *"Great for reducing context-switching — no need to leave GitHub to search Stack Overflow."*
+**意図的なギャップ（Copilot が埋める対象）:**
+- ❌ ユニットテストなし
+- ❌ Dockerfile なし
+- ❌ 入力バリデーションなし
+- ❌ CI/CD ワークフローなし
 
 ---
 
-## 🤖 Scenario 2: Copilot Coding Agent (Issue → PR)
+## 💬 スライド 3：入口（Entry）
 
-> **Goal:** Create a GitHub Issue, assign it to Copilot, and watch it autonomously produce a working Pull Request.
+> **メッセージ:** Chat がコードベース理解の入口となり、そこから Issue 作成・Agent 起動まで一気通貫でつながる
 
-### Step 2-1: Create the Issue
+### 全体の流れ
 
-1. Navigate to **Issues** → **New Issue**
-2. Fill in:
-
-   **Title:**
-   ```
-   Add unit tests for the Todo API endpoints
-   ```
-
-   **Body:**
-   ```markdown
-   We need unit tests for all CRUD endpoints in the Todo API.
-
-   ## Requirements
-   - Use `pytest` and `httpx` for testing
-   - Test all endpoints: GET /todos, GET /todos/{id}, POST /todos, PUT /todos/{id}, DELETE /todos/{id}
-   - Test both success and error cases (e.g., 404 for missing todo)
-   - Add a `tests/` directory with proper structure
-   - Include a `conftest.py` with shared test fixtures
-   ```
-
-3. Submit the Issue
-
-### Step 2-2: Assign to Copilot
-
-1. On the Issue page, click **Assignees** → select **Copilot**
-2. Copilot begins working autonomously:
-   - 📖 Reads and analyzes the entire codebase
-   - 🌿 Creates a new branch
-   - ✍️ Writes code changes
-   - 📬 Opens a Pull Request linked to the Issue
-
-3. **Wait ~1–3 minutes** for Copilot to complete
-
-🗣️ **Talking point:** *"This is the 'agentic' part — Copilot isn't just suggesting a line of code. It's reading the project, understanding the structure, creating files, and delivering a complete solution."*
-
-### Step 2-3: Review the Result
-
-1. Open the Pull Request that Copilot created
-2. Walk through:
-   - **PR description** — auto-generated, references the Issue
-   - **New files** — `tests/` directory with pytest structure
-   - **Test cases** — covers success paths AND error cases (404s)
-   - **Correct imports** — references actual `app.main` and `app.database`
-
-🗣️ **Talking point:** *"This isn't toy code — it's production-quality tests that understand our actual API structure."*
-
-### Backup Issue (if time is tight)
-
-If the Coding Agent takes too long, use this pre-prepared alternative:
-
-**Title:** `Add input validation with proper error messages`
-
-```markdown
-The API currently accepts any string for todo titles, including empty strings.
-
-## Requirements
-- Title must be between 1 and 100 characters
-- Description must be at most 500 characters if provided
-- Return 422 with clear error messages for invalid input
-- Update the Pydantic models in `app/models.py` with field validators
+```
+Chat でコード理解 → 改善点の発見 → Issue として作成 → Copilot をアサイン
+       ↓                  ↓                ↓                  ↓
+  「説明して」       「テストがない」    Issue が作られる    スライド 4 へ
 ```
 
 ---
 
-## 🔍 Scenario 3: Copilot Code Review on PR
+### ステップ 1：Chat でコードベースを理解する
 
-> **Goal:** Show how Copilot automatically reviews Pull Requests and provides actionable, intelligent feedback.
+1. GitHub.com でリポジトリ（`shinyay/demo-ghec`）を開く
+2. 右上の **Copilot Chat アイコン** をクリック
+3. 質問する：
 
-### Step 3-1: View the PR Summary
+   > **「このプロジェクトは何をするものですか？アーキテクチャとファイル間の関係を説明してください」**
 
-1. Open the PR created by Copilot (from Scenario 2) — or any other PR
-2. Show the **Copilot-generated summary** in the PR description
-3. **Expected result:** An accurate description of what changed and why
+4. **期待結果:**
+   - Copilot がリポジトリ全体を読み込む
+   - FastAPI ベースの Todo API であること
+   - `main.py`（ルート） → `models.py`（スキーマ） → `database.py`（ストレージ）の3層構造
+   - 5つの CRUD エンドポイントの一覧
 
-🗣️ **Talking point:** *"No more 'updated files' as a PR description. Copilot writes the summary so reviewers can understand the change at a glance."*
-
-### Step 3-2: Review Comments
-
-1. Go to the **Files changed** tab
-2. Show Copilot's review comments:
-   - 🐛 Identifies potential bugs
-   - 💡 Suggests improvements
-   - 🔒 Flags security concerns
-3. **Expected result:** Comments are specific and actionable — referencing actual code lines and suggesting concrete fixes
-
-🗣️ **Talking point:** *"These aren't generic lint warnings. Copilot understands the logic and catches issues that require understanding the business context."*
-
-### Step 3-3: Ask Copilot in the PR
-
-1. In the PR conversation tab, type a comment mentioning Copilot:
-
-   > **"Are there any edge cases this PR doesn't handle?"**
-
-2. **Expected result:** Copilot analyzes the diff and suggests additional test scenarios or missing edge cases
-
-🗣️ **Talking point:** *"You can have a conversation with Copilot right in the PR — it's like having a senior engineer available 24/7 for code review."*
+🗣️ **トーク:**
+*「Chat は最もカジュアルな入口です。リポジトリを開いて質問するだけで、全ファイルを理解した回答が得られます。新しいチームメンバーのオンボーディングにも使えます」*
 
 ---
 
-## 🎯 Wrap-up
+### ステップ 2：改善点を聞く
 
-### Three Agentic Capabilities Demonstrated
+1. 続けて Chat で質問する：
 
-| Capability | What it does | Business value |
-|------------|-------------|----------------|
-| **💬 Chat** | Understand any codebase instantly, generate code with full context | Faster onboarding, reduced context-switching |
-| **🤖 Coding Agent** | Turn Issues into working PRs autonomously | Accelerate feature delivery, handle routine tasks |
-| **🔍 Code Review** | Automated, intelligent PR review | Catch bugs earlier, consistent quality bar |
+   > **「このプロジェクトの改善すべき点は何ですか？」**
 
-### Key Messages
+2. **期待結果:**
+   Copilot が複数の改善点を指摘する。例：
+   - ⚠️ ユニットテストがない
+   - ⚠️ 入力バリデーションがない
+   - ⚠️ Dockerfile がない
+   - ⚠️ CI/CD パイプラインがない
+   - ⚠️ ログ出力がない
 
-1. **Full repo context** — Copilot understands your entire codebase, not just the current file
-2. **Autonomous execution** — From Issue to PR without human intervention
-3. **Quality, not just speed** — Production-quality code with proper testing and error handling
-4. **Complements humans** — Augments your team, doesn't replace code review or decision-making
+🗣️ **トーク:**
+*「Copilot はコードの中身だけでなく、プロジェクトに足りないものも指摘できます。コードレビューの前段階として、プロジェクト全体の健全性チェックにも使えます」*
 
 ---
 
-## 🎁 Bonus Scenarios (if time permits)
+### ステップ 3：Chat から Issue を作成する
 
-### Bonus A: Multi-file Task
+1. Copilot の改善提案を受けて、Chat で依頼する：
 
-**Issue:** *"Add a `/health` endpoint and a GitHub Actions CI workflow"*
+   > **「ユニットテストがないという改善点について、GitHub Issue を作成してください。pytest と httpx を使って、全エンドポイントのテストを追加する内容にしてください」**
 
-Shows Copilot creating files across different directories (`app/main.py` + `.github/workflows/ci.yml`).
+2. **期待結果:**
+   - Copilot が Issue のタイトルと本文を生成する
+   - 「Create Issue」ボタン（またはリンク）が表示される
+   - クリックすると Issue 作成画面にプリフィルされる
 
-### Bonus B: Bug Fix
+3. Issue を確認して **Submit** する
 
-1. Intentionally introduce a bug (e.g., wrong status code on delete)
-2. **Issue:** *"Bug: DELETE /todos/{id} returns 200 instead of 204"*
-3. Assign to Copilot → it finds and fixes the exact line
+🗣️ **トーク:**
+*「Chat で理解 → 改善点の発見 → Issue 化。この流れが一つの画面で完結します。コンテキストスイッチなしで、思考からアクションに直結できます」*
 
-### Bonus C: Dockerfile via Coding Agent
+---
 
-**Issue:** *"Add a Dockerfile for containerized deployment"*
+### ステップ 4：Issue に Copilot をアサインする
 
+1. 作成された Issue ページで **Assignees** をクリック
+2. **Copilot** を選択してアサインする
+3. Copilot が作業を開始する：
+   - 「Copilot is working...」の表示を確認
+
+🗣️ **トーク:**
+*「Issue に Copilot をアサインするだけで、Agent が自律的にコードを書き始めます。ここから先はスライド 4『実行』で詳しく見ていきます」*
+
+> ⏳ **Agent の実行には 1〜3 分かかる。この間にスライドの説明に戻り、スライド 4 の説明を開始する。**
+
+---
+
+### この Demo のポイント
+
+| ポイント | 説明 |
+|---------|------|
+| **フルリポジトリコンテキスト** | Chat は1ファイルではなく、リポジトリ全体を理解している |
+| **Chat → Issue のシームレスな接続** | 思考からアクションへのコンテキストスイッチがゼロ |
+| **構造化された Issue 生成** | Copilot がプロジェクトを理解した上で要件を記述する |
+| **Agent 起動への自然な流れ** | Issue 作成 → アサイン → 自律実行が一直線 |
+
+---
+
+### バックアップ（Chat → Issue がうまくいかない場合）
+
+手動で Issue を作成する：
+
+**Title:**
+```
+Add unit tests for the Todo API endpoints
+```
+
+**Body:**
 ```markdown
+We need unit tests for all CRUD endpoints in the Todo API.
+
 ## Requirements
-- Use a multi-stage build for smaller image size
-- Use Python 3.11-slim as the base image
-- Expose port 8000
-- Run with uvicorn in production mode
-- Include a .dockerignore file
+- Use `pytest` and `httpx` for testing
+- Test all endpoints: GET /todos, GET /todos/{id}, POST /todos, PUT /todos/{id}, DELETE /todos/{id}
+- Test both success and error cases (e.g., 404 for missing todo)
+- Add a `tests/` directory with proper structure
+- Include a `conftest.py` with shared test fixtures
 ```
