@@ -72,6 +72,16 @@ class TestCreateTodo:
         response = client.post("/todos", json={})
         assert response.status_code == 422
 
+    def test_create_todo_empty_string_title_returns_422(self, client):
+        response = client.post("/todos", json={"title": ""})
+        assert response.status_code == 422
+
+    def test_create_todo_very_long_title(self, client):
+        long_title = "a" * 1_000
+        response = client.post("/todos", json={"title": long_title})
+        assert response.status_code == 201
+        assert response.json()["title"] == long_title
+
 
 # ---------------------------------------------------------------------------
 # GET /todos/{id}
@@ -144,3 +154,11 @@ class TestDeleteTodo:
         response = client.delete("/todos/9999")
         assert response.status_code == 404
         assert response.json()["detail"] == "Todo not found"
+
+    def test_delete_same_todo_twice_returns_404_on_second(self, client):
+        created = client.post("/todos", json={"title": "Delete me twice"}).json()
+        first = client.delete(f"/todos/{created['id']}")
+        assert first.status_code == 204
+        second = client.delete(f"/todos/{created['id']}")
+        assert second.status_code == 404
+        assert second.json()["detail"] == "Todo not found"
