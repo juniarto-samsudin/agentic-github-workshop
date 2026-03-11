@@ -13,7 +13,7 @@
 | 4 | [実行（Execution）](#-スライド-4実行execution) | Actions 上の実行過程 → セッションログ → 完成 PR 確認 | ~4 min |
 | 5 | [協働（Collaboration）](#-スライド-5協働collaboration) | PR 上で @copilot にエッジケース追加を依頼 → 反復 | ~3 min |
 | 6 | [レビュー（Review）](#-スライド-6レビューreview) | 自動レビュー確認 → コメント＆提案 → 修正ループ | ~3 min |
-| 7 | [文脈（Context）](#-スライド-7文脈context) | Custom Instructions を見せる → Chat で効果確認 → Spaces 紹介 | ~2 min |
+| 7 | [文脈（Context）](#-スライド-7文脈context) | Custom Instructions → Chat 効果確認 → Agent 選択 → Spaces | ~3 min |
 | 8 | 統制（Governance） | TBD | TBD |
 
 ### デモアプリケーション
@@ -473,9 +473,9 @@ PR を開いている状態 → @copilot にフィードバック → Copilot �
 ### 全体の流れ
 
 ```
-Custom Instructions を見せる → Chat でコード生成 → 規約が反映されていることを確認 → Spaces を紹介
-         ↓                          ↓                         ↓                          ↓
-  .github/ のファイル          「新しいエンドポイント」     日本語docstring等が出力     複数リポの知識統合
+Custom Instructions を見せる → Chat でコード生成 → Agent 選択 → Spaces を紹介
+         ↓                          ↓                    ↓                  ↓
+  .github/ のファイル          規約に従った出力     専門 Agent を選ぶ     複数リポの知識統合
 ```
 
 ---
@@ -544,7 +544,27 @@ Custom Instructions を見せる → Chat でコード生成 → 規約が反映
 
 ---
 
-### ステップ 3：Copilot Spaces を紹介する
+### ステップ 3：Coding Agent で Custom Agent を選択する
+
+> Issue アサイン時に使用する Agent を選べることを見せる
+
+1. 新しい Issue を作成する（または既存の Issue を開く）
+2. **Assignees** → **Copilot** を選択する際に、**Agent の選択肢**が表示されることを見せる：
+   - デフォルトの Copilot Agent
+   - Organization やリポジトリで設定されたカスタム Agent（存在する場合）
+
+3. Agent 選択画面で説明：
+
+   > 「ここでプロジェクトに最適化されたカスタム Agent を選べます。例えば、特定のフレームワーク（FastAPI）に精通した Agent や、社内の開発規約を深く理解した Agent を設定できます」
+
+4. **デフォルトの Copilot** を選択して Issue をアサインする
+
+🗣️ **トーク:**
+*「Custom Instructions が『ルールブック』だとすれば、Custom Agent は『そのルールを熟知した専門家』を選ぶようなものです。チームごと、プロジェクトごとに最適な Agent を用意できます。例えば、フロントエンド専用 Agent、セキュリティ特化 Agent、テスト専門 Agent といった使い分けが可能です」*
+
+---
+
+### ステップ 4：Copilot Spaces を紹介する
 
 1. GitHub.com の **Copilot** メニューから **Spaces** を開く（利用可能な場合）
 2. UI をナビゲーションしながら説明：
@@ -569,6 +589,7 @@ Custom Instructions を見せる → Chat でコード生成 → 規約が反映
 | **一度書けば全機能に反映** | Custom Instructions は Chat・Coding Agent・Code Review すべてに適用 |
 | **既存コードより Instructions を優先** | 現在のコードにないルールでも Instructions に従う |
 | **目に見える効果** | 日本語 docstring、ページネーション等、出力で即座に確認可能 |
+| **Custom Agent で専門家を選択** | プロジェクトに最適化された Agent を Issue アサイン時に選べる |
 | **Spaces で横断的な文脈** | 複数リポジトリの知識を統合して Copilot に持たせられる |
 | **チーム規約の自動適用** | 個人の知識ではなく、チームのルールとして定着 |
 
