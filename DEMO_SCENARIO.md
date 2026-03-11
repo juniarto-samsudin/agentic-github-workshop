@@ -13,7 +13,7 @@
 | 4 | [実行（Execution）](#-スライド-4実行execution) | Actions 上の実行過程 → セッションログ → 完成 PR 確認 | ~4 min |
 | 5 | [協働（Collaboration）](#-スライド-5協働collaboration) | PR 上で @copilot にエッジケース追加を依頼 → 反復 | ~3 min |
 | 6 | [レビュー（Review）](#-スライド-6レビューreview) | 自動レビュー確認 → コメント＆提案 → 修正ループ | ~3 min |
-| 7 | 文脈（Context） | TBD | TBD |
+| 7 | [文脈（Context）](#-スライド-7文脈context) | Custom Instructions を見せる → Chat で効果確認 → Spaces 紹介 | ~2 min |
 | 8 | 統制（Governance） | TBD | TBD |
 
 ### デモアプリケーション
@@ -463,3 +463,121 @@ PR を開いている状態 → @copilot にフィードバック → Copilot �
   - PR の **Reviewers** から **Copilot** を手動で選んでレビューをリクエスト
 - レビューコメントが少ない場合：
   - 「コードの品質が高いほどコメントは少なくなります。これ自体がポジティブなシグナルです」と補足
+
+---
+
+## 🧠 スライド 7：文脈（Context）
+
+> **メッセージ:** Custom Instructions / Spaces でリポジトリ固有の知識を Copilot に持たせ、チームの規約を自動的に適用する
+
+### 全体の流れ
+
+```
+Custom Instructions を見せる → Chat でコード生成 → 規約が反映されていることを確認 → Spaces を紹介
+         ↓                          ↓                         ↓                          ↓
+  .github/ のファイル          「新しいエンドポイント」     日本語docstring等が出力     複数リポの知識統合
+```
+
+---
+
+### ステップ 1：Custom Instructions ファイルを見せる
+
+1. リポジトリの **Code タブ** → `.github/copilot-instructions.md` を開く
+2. 内容をスクロールしながら、主要なルールをハイライト：
+
+   | ルール | 効果 |
+   |--------|------|
+   | 🇯🇵 コメントと docstring は日本語 | 生成コードで一目瞭然 |
+   | 📐 統一エラーフォーマット (`error.code`, `error.message`) | 現在の `HTTPException` とは別構造 |
+   | 📄 リスト系にページネーション (`skip`, `limit`) | 現在のコードにはない機能 |
+   | 🏷️ テスト命名 `test_<対象>_<条件>_<期待結果>` | 汎用的な名前と明らかに異なる |
+   | 📝 全エンドポイントにログ出力 | 現在のコードにはない |
+
+🗣️ **トーク:**
+*「`.github/copilot-instructions.md` をリポジトリに置くだけで、Copilot の Chat・Coding Agent・Code Review すべてに反映されます。チームの規約を一度書けば、全員の Copilot が自動的に従います」*
+
+---
+
+### ステップ 2：Chat で Custom Instructions の効果を確認する
+
+1. Copilot Chat を開く
+2. 質問する：
+
+   > **「このプロジェクトに /todos の検索エンドポイント（キーワードで todo を検索）を追加するコードを書いてください」**
+
+3. **期待結果** — Custom Instructions に従ったコードが生成される：
+
+   ```python
+   @app.get("/todos/search", response_model=list[Todo])
+   def search_todos(
+       keyword: str,
+       skip: int = 0,          # ← ページネーション（Custom Instructions）
+       limit: int = 20,        # ← デフォルト値 20（Custom Instructions）
+   ) -> list[Todo]:
+       """キーワードで Todo を検索する。
+
+       Args:
+           keyword: 検索キーワード
+           skip: スキップする件数
+           limit: 取得する最大件数
+
+       Returns:
+           検索条件に一致する Todo のリスト
+
+       Raises:
+           AppError: 検索処理に失敗した場合
+       """
+       # ← 日本語 docstring（Custom Instructions）
+       # ← Google スタイル（Custom Instructions）
+       # ← 型ヒント付き（Custom Instructions）
+   ```
+
+4. **確認ポイントを聴衆に示す：**
+   - ✅ docstring が**日本語**で書かれている
+   - ✅ **Google スタイル**（Args / Returns / Raises セクション）
+   - ✅ ページネーション（`skip`, `limit`）が**自動的に追加**されている
+   - ✅ `limit` のデフォルト値が **20**（Custom Instructions で指定した値）
+   - ✅ すべての引数に**型ヒント**がある
+
+🗣️ **トーク:**
+*「何も指示していないのに、日本語の docstring、ページネーション、型ヒントが自動的に含まれています。これは Custom Instructions が効いている証拠です。現在のコード（`app/main.py`）にはこれらの規約は適用されていません——つまり、Copilot は既存コードのパターンではなく、Custom Instructions を優先しています」*
+
+---
+
+### ステップ 3：Copilot Spaces を紹介する
+
+1. GitHub.com の **Copilot** メニューから **Spaces** を開く（利用可能な場合）
+2. UI をナビゲーションしながら説明：
+
+   - 📁 **リポジトリの追加** — 複数のリポジトリをまとめて参照可能
+   - 📄 **ドキュメントの追加** — 設計書・仕様書を文脈として追加
+   - 👥 **チーム共有** — ナレッジベースをチームで共有
+
+3. デモリポジトリとの関連で説明：
+
+   > 「例えばこの Todo API がマイクロサービスの一部だった場合、他のサービスのリポジトリも Space にまとめることで、Copilot がサービス間の依存関係を理解した上でコードを生成できます」
+
+🗣️ **トーク:**
+*「Custom Instructions はリポジトリ単位の文脈、Spaces はリポジトリの枠を超えた文脈です。組織のアーキテクチャ全体の知識を Copilot に持たせることができます」*
+
+---
+
+### この Demo のポイント
+
+| ポイント | 説明 |
+|---------|------|
+| **一度書けば全機能に反映** | Custom Instructions は Chat・Coding Agent・Code Review すべてに適用 |
+| **既存コードより Instructions を優先** | 現在のコードにないルールでも Instructions に従う |
+| **目に見える効果** | 日本語 docstring、ページネーション等、出力で即座に確認可能 |
+| **Spaces で横断的な文脈** | 複数リポジトリの知識を統合して Copilot に持たせられる |
+| **チーム規約の自動適用** | 個人の知識ではなく、チームのルールとして定着 |
+
+---
+
+### バックアップ
+
+- Chat でルールが完全に反映されない場合：
+  - 反映されている部分をハイライトし「主要なルールが適用されています」と補足
+  - 「Coding Agent ではより厳密に適用されます」と説明
+- Spaces が利用できない場合：
+  - スライドで概念を説明し「現在プレビュー提供中です」と補足
