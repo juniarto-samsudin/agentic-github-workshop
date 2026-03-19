@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Entry — From Chat to Agent"
+step_number: 1
+estimated_minutes: 10
+permalink: /chapter/03/
+---
+
 # Chapter 3: Entry — From Chat to Agent
 
 > **Key takeaway:** Copilot Chat is the most natural entry point — understand code, discover gaps, create Issues, and trigger the Agent, all from a single conversation.

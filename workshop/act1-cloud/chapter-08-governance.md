@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Governance — Mission Control and Agent Oversight"
+step_number: 6
+estimated_minutes: 10
+permalink: /chapter/08/
+---
+
 # Chapter 8: Governance — Mission Control and Agent Oversight
 
 > **Key takeaway:** Mission Control is your command center for all Agent tasks — monitor progress, steer running Agents in real-time, and maintain full visibility across all autonomous work.

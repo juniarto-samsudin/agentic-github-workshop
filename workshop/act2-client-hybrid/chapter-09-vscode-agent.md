@@ -1,3 +1,11 @@
+---
+layout: step
+title: "VS Code Agent Mode — Interactive Real-Time Collaboration"
+step_number: 7
+estimated_minutes: 15
+permalink: /chapter/09/
+---
+
 # Chapter 9: VS Code Agent Mode — Interactive Real-Time Collaboration
 
 > **Key takeaway:** VS Code Agent Mode is "coding together" — the Agent edits files in real-time while you watch, approve, reject, or redirect each change. Unlike the Cloud Agent, you're in the driver's seat.

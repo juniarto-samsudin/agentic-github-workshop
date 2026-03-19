@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Act 2 — Client-Side & Hybrid: Agent Works With You"
+permalink: /act2-overview/
+---
+
 # 💻 Act 2 — Client-Side & Hybrid: Agent Works *With* You
 
 > In Act 2, you'll experience GitHub Copilot as an **interactive collaborator** that works alongside you in real-time. You'll use VS Code Agent Mode, Copilot CLI, and hybrid workflows that combine cloud and client capabilities.

@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Workshop Architecture Guide"
+permalink: /workshop-guide/
+---
+
 # Agentic GitHub Copilot — Workshop Guide
 
 > Chapter-by-chapter hands-on exercises exploring the 6-layer agentic architecture across Cloud, VS Code, and CLI surfaces.

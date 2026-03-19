@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Act 1 — Cloud-Side: Agent Works For You"
+permalink: /act1-overview/
+---
+
 # ☁️ Act 1 — Cloud-Side: Agent Works *For* You
 
 > In Act 1, you'll experience GitHub Copilot as an **autonomous agent** that works asynchronously on your behalf. You'll assign tasks via Issues, and the Agent will plan, code, test, and deliver results as Pull Requests — all running on GitHub Actions.

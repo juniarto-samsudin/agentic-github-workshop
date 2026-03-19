@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Review — Automated Code Review and Fix Loops"
+step_number: 4
+estimated_minutes: 10
+permalink: /chapter/06/
+---
+
 # Chapter 6: Review — Automated Code Review and Fix Loops
 
 > **Key takeaway:** Copilot Code Review autonomously reviews PR diffs — not just style, but logic, test quality, and best practices — and the review→fix loop creates a continuous improvement cycle.

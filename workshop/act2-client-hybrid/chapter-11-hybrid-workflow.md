@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Hybrid Workflow — Cloud ⇔ Client Relay Development"
+step_number: 9
+estimated_minutes: 15
+permalink: /chapter/11/
+---
+
 # Chapter 11: Hybrid Workflow — Cloud ⇔ Client Relay Development
 
 > **Key takeaway:** The right tool for each phase — CLI for rapid analysis, Cloud Agent for autonomous heavy lifting, Mission Control for oversight, VS Code for precision refinement. Seamless handoffs between all of them.

@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Execution — Observing the Agent at Work"
+step_number: 2
+estimated_minutes: 10
+permalink: /chapter/04/
+---
+
 # Chapter 4: Execution — Observing the Agent at Work
 
 > **Key takeaway:** The Coding Agent runs on GitHub Actions, and everything it does — every file it reads, every decision it makes — is fully observable through session logs.

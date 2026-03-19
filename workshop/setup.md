@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Environment Setup"
+step_number: 0
+estimated_minutes: 15
+permalink: /setup/
+---
+
 # Workshop Setup Guide
 
 > Complete these steps before starting the workshop. Estimated setup time: **~15 minutes**.

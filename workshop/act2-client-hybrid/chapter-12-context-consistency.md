@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Context Consistency — Same Rules, Every Surface"
+step_number: 10
+estimated_minutes: 10
+permalink: /chapter/12/
+---
+
 # Chapter 12: Context Consistency — Same Rules, Every Surface
 
 > **Key takeaway:** Custom Instructions defined in a single file are automatically applied across GitHub.com Chat, VS Code, and Copilot CLI — ensuring consistent code quality regardless of which tool developers prefer.

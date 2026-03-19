@@ -1,0 +1,46 @@
+remote_theme: shinyay/workshop-pages-theme
+
+title: "Agentic GitHub Workshop"
+description: "Hands-on mastery of GitHub Copilot's 6-layer agentic architecture across 3 surfaces"
+
+workshop:
+  title: "Agentic GitHub Workshop"
+  description: "Hands-on mastery of GitHub Copilot's 6-layer agentic architecture across 3 surfaces — GitHub.com, VS Code, and Copilot CLI"
+  category: github-copilot
+  language: Python
+  difficulty: Intermediate
+  duration: "~2 hours"
+  total_steps: 10
+  repo_url: https://github.com/shinyay/agentic-github-workshop
+  hub_url: https://shinyay.github.io/awesome-shinyay-workshop
+  prerequisites:
+    - GitHub account with Copilot Business or Enterprise
+    - Python 3.11+
+    - VS Code (Insiders recommended)
+    - GitHub CLI 2.0+
+    - Docker 20.10+ (Chapter 10 only)
+  show_toc: true
+  show_progress: true
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+plugins:
+  - jekyll-remote-theme
+
+exclude:
+  - app/
+  - "*.py"
+  - "*.pyc"
+  - __pycache__/
+  - requirements.txt
+  - .devcontainer/
+  - .github/
+  - README.md
+  - LICENSE
+  - "*.sh"
+  - venv/
+  - .venv/
+  - .env

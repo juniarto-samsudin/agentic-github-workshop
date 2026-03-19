@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Copilot CLI — Terminal-First Development"
+step_number: 8
+estimated_minutes: 12
+permalink: /chapter/10/
+---
+
 # Chapter 10: Copilot CLI — Terminal-First Development
 
 > **Key takeaway:** Copilot CLI brings the full Copilot experience to the terminal — analyze projects, generate code, build, test, and commit without leaving the command line.

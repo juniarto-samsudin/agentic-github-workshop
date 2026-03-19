@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Context — Custom Instructions, Agents, and Spaces"
+step_number: 5
+estimated_minutes: 10
+permalink: /chapter/07/
+---
+
 # Chapter 7: Context — Custom Instructions, Agents, and Spaces
 
 > **Key takeaway:** Custom Instructions let you define team standards in a single file — and every Copilot feature (Chat, Coding Agent, Code Review) automatically follows those rules.

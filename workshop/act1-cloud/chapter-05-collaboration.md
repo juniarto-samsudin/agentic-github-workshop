@@ -1,3 +1,11 @@
+---
+layout: step
+title: "Collaboration — Human ↔ Agent Dialogue on Pull Requests"
+step_number: 3
+estimated_minutes: 10
+permalink: /chapter/05/
+---
+
 # Chapter 5: Collaboration — Human ↔ Agent Dialogue on Pull Requests
 
 > **Key takeaway:** The PR is a collaboration hub where you and Copilot iterate — you provide direction, the Agent executes, and the entire conversation is preserved as history.
