@@ -1,55 +1,56 @@
 # Copilot Custom Instructions for Todo API
 
-## 言語とドキュメント
+## Language & Documentation
 
-- コード内のコメントと docstring は**日本語**で記述すること
-- docstring は Google スタイルで記述し、必ず以下を含めること：
-  - 関数の説明（1行目）
-  - Args セクション（引数がある場合）
-  - Returns セクション（戻り値がある場合）
-  - Raises セクション（例外がある場合）
+- Write all code comments and docstrings in **English**
+- Use **Google-style** docstrings and always include:
+  - Function summary (first line)
+  - Args section (if parameters exist)
+  - Returns section (if there is a return value)
+  - Raises section (if exceptions are raised)
+  - Example section showing a sample usage or curl command
 
-## コーディング規約
+## Coding Conventions
 
-- Python 3.11+ の型ヒントを**すべての関数**に必ず使用すること
-- `Union` や `Optional` ではなく `X | None` 形式を使用すること
-- 変数名・関数名はスネークケース、クラス名はパスカルケース
-- マジックナンバーは使用せず、定数として定義すること
+- Use Python 3.11+ type hints on **all functions** without exception
+- Use `X | None` format instead of `Union` or `Optional`
+- Use snake_case for variables and functions, PascalCase for classes
+- Never use magic numbers — define named constants instead
 
-## エラーハンドリング
+## Error Handling
 
-- すべての API エラーレスポンスは以下の統一フォーマットで返すこと：
+- All API error responses must use this unified format:
   ```json
   {
     "error": {
       "code": "ERROR_CODE",
-      "message": "人間が読めるエラーメッセージ",
+      "message": "A human-readable error message",
       "details": {}
     }
   }
   ```
-- エラーコードはアッパースネークケースで命名すること（例: `TODO_NOT_FOUND`, `INVALID_INPUT`）
-- HTTPException ではなくカスタム例外クラスを使用すること
+- Error codes must use UPPER_SNAKE_CASE (e.g., `TODO_NOT_FOUND`, `INVALID_INPUT`)
+- Use custom exception classes instead of HTTPException
 
-## API 設計
+## API Design
 
-- すべてのエンドポイントには `response_model` を明示的に指定すること
-- リスト系エンドポイントにはページネーションパラメータ（`skip`, `limit`）を実装すること
-- `limit` のデフォルト値は 20、最大値は 100 とすること
-- レスポンスヘッダーに `X-Total-Count` を含めること
+- Specify `response_model` explicitly on all endpoints
+- Implement pagination parameters (`skip`, `limit`) on all list endpoints
+- Default `limit` is 20, maximum is 100
+- Include `X-Total-Count` header in list responses
 
-## テスト規約
+## Testing
 
-- pytest を使用すること
-- テストファイルは `tests/` ディレクトリに配置すること
-- テスト関数名は `test_<対象>_<条件>_<期待結果>` の形式にすること
-  - 例: `test_create_todo_with_valid_data_returns_201`
-  - 例: `test_get_todo_with_invalid_id_returns_404`
-- 各テスト関数に日本語の docstring で**テストの目的**を記述すること
-- テスト間の独立性を確保するため、各テストの前にデータベースをリセットすること
+- Use pytest as the test framework
+- Place test files in the `tests/` directory
+- Name test functions as `test_<target>_<condition>_<expected_result>`
+  - Example: `test_create_todo_with_valid_data_returns_201`
+  - Example: `test_get_todo_with_invalid_id_returns_404`
+- Include a docstring in each test function describing **the purpose of the test**
+- Ensure test isolation by resetting the database before each test
 
-## ログ出力
+## Logging
 
-- すべてのエンドポイントでリクエストのログを出力すること
-- ログフォーマット: `[{メソッド}] {パス} - {ステータスコード} ({処理時間}ms)`
-- ログライブラリには Python 標準の `logging` モジュールを使用すること
+- Log every endpoint request
+- Log format: `[{method}] {path} - {status_code} ({elapsed}ms)`
+- Use Python's standard `logging` module
