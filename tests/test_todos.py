@@ -6,6 +6,8 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app import database
 
+LONG_TITLE = "A" * 1000
+
 
 @pytest.fixture(autouse=True)
 def reset_db() -> None:
@@ -95,6 +97,19 @@ def test_create_todo_with_missing_title_returns_422() -> None:
     assert response.status_code == 422
 
 
+def test_create_todo_with_empty_string_title_returns_422() -> None:
+    """POST /todos with an empty string title should be rejected with 422 Unprocessable Entity."""
+    response = client.post("/todos", json={"title": ""})
+    assert response.status_code == 422
+
+
+def test_create_todo_with_very_long_title_returns_201() -> None:
+    """POST /todos with a 1000-character title should be accepted and return 201."""
+    response = client.post("/todos", json={"title": LONG_TITLE})
+    assert response.status_code == 201
+    assert response.json()["title"] == LONG_TITLE
+
+
 # ---------------------------------------------------------------------------
 # PUT /todos/{id}
 # ---------------------------------------------------------------------------
@@ -120,6 +135,16 @@ def test_update_todo_with_invalid_id_returns_404() -> None:
     assert response.status_code == 404
 
 
+def test_update_todo_after_deletion_returns_404() -> None:
+    """PUT /todos/{id} should return 404 when the todo was previously deleted."""
+    created = client.post("/todos", json={"title": "Temporary"}).json()
+    todo_id = created["id"]
+    assert client.delete(f"/todos/{todo_id}").status_code == 204
+
+    response = client.put(f"/todos/{todo_id}", json={"title": "Ghost update"})
+    assert response.status_code == 404
+
+
 # ---------------------------------------------------------------------------
 # DELETE /todos/{id}
 # ---------------------------------------------------------------------------
@@ -140,3 +165,12 @@ def test_delete_todo_with_invalid_id_returns_404() -> None:
     """DELETE /todos/{id} should return 404 when the todo does not exist."""
     response = client.delete("/todos/9999")
     assert response.status_code == 404
+
+
+def test_delete_todo_twice_second_attempt_returns_404() -> None:
+    """DELETE /todos/{id} should return 404 on a second attempt to delete the same todo."""
+    created = client.post("/todos", json={"title": "Delete me twice"}).json()
+    todo_id = created["id"]
+
+    assert client.delete(f"/todos/{todo_id}").status_code == 204
+    assert client.delete(f"/todos/{todo_id}").status_code == 404
