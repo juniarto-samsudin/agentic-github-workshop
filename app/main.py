@@ -38,8 +38,8 @@ async def todo_not_found_handler(_request: Request, _exc: TodoNotFoundError) -> 
     return JSONResponse(status_code=404, content=TODO_NOT_FOUND_BODY)
 
 
-@app.get("/")
-def root():
+@app.get("/", response_model=dict[str, str])
+def root() -> dict[str, str]:
     return {"message": "Welcome to the Todo API", "docs": "/docs"}
 
 
