@@ -10,6 +10,14 @@ LONG_TITLE_LENGTH = 1000
 LONG_TITLE = "A" * LONG_TITLE_LENGTH
 MISSING_TODO_ID = 9999
 
+TODO_NOT_FOUND_ERROR = {
+    "error": {
+        "code": "TODO_NOT_FOUND",
+        "message": "Todo not found",
+        "details": {},
+    }
+}
+
 
 @pytest.fixture(autouse=True)
 def reset_db() -> None:
@@ -76,7 +84,7 @@ def test_get_todo_with_invalid_id_returns_404() -> None:
     """GET /todos/{id} should return 404 when the todo does not exist."""
     response = client.get(f"/todos/{MISSING_TODO_ID}")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Todo not found"}
+    assert response.json() == TODO_NOT_FOUND_ERROR
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +153,7 @@ def test_update_todo_with_invalid_id_returns_404() -> None:
     """PUT /todos/{id} should return 404 when the todo does not exist."""
     response = client.put(f"/todos/{MISSING_TODO_ID}", json={"title": "Doesn't matter"})
     assert response.status_code == 404
-    assert response.json() == {"detail": "Todo not found"}
+    assert response.json() == TODO_NOT_FOUND_ERROR
 
 
 def test_update_todo_after_deletion_returns_404() -> None:
@@ -156,7 +164,7 @@ def test_update_todo_after_deletion_returns_404() -> None:
 
     response = client.put(f"/todos/{todo_id}", json={"title": "Ghost update"})
     assert response.status_code == 404
-    assert response.json() == {"detail": "Todo not found"}
+    assert response.json() == TODO_NOT_FOUND_ERROR
 
 
 # ---------------------------------------------------------------------------
@@ -179,7 +187,7 @@ def test_delete_todo_with_invalid_id_returns_404() -> None:
     """DELETE /todos/{id} should return 404 when the todo does not exist."""
     response = client.delete(f"/todos/{MISSING_TODO_ID}")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Todo not found"}
+    assert response.json() == TODO_NOT_FOUND_ERROR
 
 
 def test_delete_todo_twice_second_attempt_returns_404() -> None:
@@ -190,4 +198,4 @@ def test_delete_todo_twice_second_attempt_returns_404() -> None:
     assert client.delete(f"/todos/{todo_id}").status_code == 204
     second = client.delete(f"/todos/{todo_id}")
     assert second.status_code == 404
-    assert second.json() == {"detail": "Todo not found"}
+    assert second.json() == TODO_NOT_FOUND_ERROR

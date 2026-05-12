@@ -1,4 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
+from app.exceptions import TodoNotFoundError
 from app.models import Todo, TodoCreate, TodoUpdate
 from app import database as db
 
@@ -7,6 +10,32 @@ app = FastAPI(
     description="A simple REST API for managing todos",
     version="1.0.0",
 )
+
+TODO_NOT_FOUND_BODY = {
+    "error": {
+        "code": "TODO_NOT_FOUND",
+        "message": "Todo not found",
+        "details": {},
+    }
+}
+
+
+@app.exception_handler(TodoNotFoundError)
+async def todo_not_found_handler(_request: Request, _exc: TodoNotFoundError) -> JSONResponse:
+    """Return a unified 404 error response when a todo is not found.
+
+    Args:
+        _request: The incoming HTTP request (unused).
+        _exc: The raised TodoNotFoundError instance (unused).
+
+    Returns:
+        A JSONResponse with status 404 and the unified error body.
+
+    Example:
+        curl -X GET http://localhost:8000/todos/9999
+        # {"error": {"code": "TODO_NOT_FOUND", "message": "Todo not found", "details": {}}}
+    """
+    return JSONResponse(status_code=404, content=TODO_NOT_FOUND_BODY)
 
 
 @app.get("/")
@@ -23,7 +52,7 @@ def list_todos():
 def get_todo(todo_id: int):
     todo = db.get_todo(todo_id)
     if todo is None:
-        raise HTTPException(status_code=404, detail="Todo not found")
+        raise TodoNotFoundError()
     return todo
 
 
@@ -41,11 +70,11 @@ def update_todo(todo_id: int, payload: TodoUpdate):
         completed=payload.completed,
     )
     if todo is None:
-        raise HTTPException(status_code=404, detail="Todo not found")
+        raise TodoNotFoundError()
     return todo
 
 
 @app.delete("/todos/{todo_id}", status_code=204)
 def delete_todo(todo_id: int):
     if not db.delete_todo(todo_id):
-        raise HTTPException(status_code=404, detail="Todo not found")
+        raise TodoNotFoundError()
