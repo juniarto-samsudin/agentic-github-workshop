@@ -74,7 +74,7 @@ def update_todo(todo_id: int, payload: TodoUpdate):
     return todo
 
 
-@app.delete("/todos/{todo_id}", status_code=204)
-def delete_todo(todo_id: int):
+@app.delete("/todos/{todo_id}", response_model=None, status_code=204)
+def delete_todo(todo_id: int) -> None:
     if not db.delete_todo(todo_id):
         raise TodoNotFoundError()
