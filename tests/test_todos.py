@@ -6,7 +6,9 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app import database
 
-LONG_TITLE = "A" * 1000
+LONG_TITLE_LENGTH = 1000
+LONG_TITLE = "A" * LONG_TITLE_LENGTH
+MISSING_TODO_ID = 9999
 
 
 @pytest.fixture(autouse=True)
@@ -72,8 +74,9 @@ def test_get_todo_with_valid_id_returns_todo() -> None:
 
 def test_get_todo_with_invalid_id_returns_404() -> None:
     """GET /todos/{id} should return 404 when the todo does not exist."""
-    response = client.get("/todos/9999")
+    response = client.get(f"/todos/{MISSING_TODO_ID}")
     assert response.status_code == 404
+    assert response.json() == {"detail": "Todo not found"}
 
 
 # ---------------------------------------------------------------------------
@@ -129,10 +132,20 @@ def test_update_todo_with_valid_id_returns_updated_todo() -> None:
     assert body["completed"] is True
 
 
+def test_update_todo_with_empty_string_title_returns_422() -> None:
+    """PUT /todos/{id} with an empty string title should be rejected with 422 Unprocessable Entity."""
+    created = client.post("/todos", json={"title": "Valid"}).json()
+    todo_id = created["id"]
+
+    response = client.put(f"/todos/{todo_id}", json={"title": ""})
+    assert response.status_code == 422
+
+
 def test_update_todo_with_invalid_id_returns_404() -> None:
     """PUT /todos/{id} should return 404 when the todo does not exist."""
-    response = client.put("/todos/9999", json={"title": "Doesn't matter"})
+    response = client.put(f"/todos/{MISSING_TODO_ID}", json={"title": "Doesn't matter"})
     assert response.status_code == 404
+    assert response.json() == {"detail": "Todo not found"}
 
 
 def test_update_todo_after_deletion_returns_404() -> None:
@@ -143,6 +156,7 @@ def test_update_todo_after_deletion_returns_404() -> None:
 
     response = client.put(f"/todos/{todo_id}", json={"title": "Ghost update"})
     assert response.status_code == 404
+    assert response.json() == {"detail": "Todo not found"}
 
 
 # ---------------------------------------------------------------------------
@@ -163,8 +177,9 @@ def test_delete_todo_with_valid_id_returns_204() -> None:
 
 def test_delete_todo_with_invalid_id_returns_404() -> None:
     """DELETE /todos/{id} should return 404 when the todo does not exist."""
-    response = client.delete("/todos/9999")
+    response = client.delete(f"/todos/{MISSING_TODO_ID}")
     assert response.status_code == 404
+    assert response.json() == {"detail": "Todo not found"}
 
 
 def test_delete_todo_twice_second_attempt_returns_404() -> None:
@@ -173,4 +188,6 @@ def test_delete_todo_twice_second_attempt_returns_404() -> None:
     todo_id = created["id"]
 
     assert client.delete(f"/todos/{todo_id}").status_code == 204
-    assert client.delete(f"/todos/{todo_id}").status_code == 404
+    second = client.delete(f"/todos/{todo_id}")
+    assert second.status_code == 404
+    assert second.json() == {"detail": "Todo not found"}

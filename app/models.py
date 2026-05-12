@@ -4,12 +4,12 @@ from datetime import datetime
 
 
 class TodoCreate(BaseModel):
-    title: str = Field(..., min_length=1)
+    title: str = Field(min_length=1)
     description: Optional[str] = None
 
 
 class TodoUpdate(BaseModel):
-    title: Optional[str] = None
+    title: Optional[str] = Field(None, min_length=1)
     description: Optional[str] = None
     completed: Optional[bool] = None
 
