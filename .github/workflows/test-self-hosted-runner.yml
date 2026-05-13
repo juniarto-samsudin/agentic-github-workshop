@@ -1,0 +1,23 @@
+name: Test Self Hosted Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Print runner info
+        run: |
+          echo "Hello from self-hosted runner"
+          hostname
+          pwd
+          whoami
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: List repository files
+        run: |
+          ls -la
